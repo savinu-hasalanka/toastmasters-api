@@ -8,7 +8,7 @@ import jakarta.persistence.Enumerated;
 @Embeddable
 public class MeetingSpeakerId {
     private Long meetingId;
-    private Long userId;
+    private String username;
 
     @Enumerated(EnumType.STRING)
     private Speaker speakerType;

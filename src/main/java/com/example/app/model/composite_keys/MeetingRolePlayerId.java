@@ -5,5 +5,5 @@ import jakarta.persistence.Embeddable;
 @Embeddable
 public class MeetingRolePlayerId {
     private Long meetingId;
-    private Long userId;
+    private String username;
 }
