@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.*;
 
-@RequiredArgsConstructor
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("api/v1/users")
 public class UserController {
     private final UserService userService;
