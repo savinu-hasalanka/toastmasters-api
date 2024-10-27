@@ -4,7 +4,7 @@ import com.example.app.exception.AlreadyExistsException;
 import com.example.app.exception.ResourceNotFoundException;
 import com.example.app.model.AppUser;
 import com.example.app.request.AddUserRequest;
-import com.example.app.request.UserUpdateRequest;
+import com.example.app.request.UpdateUserRequest;
 import com.example.app.response.ApiResponse;
 import com.example.app.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ public class UserController {
 
     @PutMapping("/user/{username}/update")
     public ResponseEntity<ApiResponse> updateUser(
-            @RequestBody UserUpdateRequest user,
+            @RequestBody UpdateUserRequest user,
             @PathVariable String username) {
 
         try {

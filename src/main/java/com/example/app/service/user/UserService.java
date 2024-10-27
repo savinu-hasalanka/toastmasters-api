@@ -5,7 +5,7 @@ import com.example.app.exception.ResourceNotFoundException;
 import com.example.app.model.AppUser;
 import com.example.app.repo.UserRepository;
 import com.example.app.request.AddUserRequest;
-import com.example.app.request.UserUpdateRequest;
+import com.example.app.request.UpdateUserRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +36,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public AppUser updateUserByUsername(UserUpdateRequest user, String username) {
+    public AppUser updateUserByUsername(UpdateUserRequest user, String username) {
         return Optional.ofNullable(getUserByUsername(username))
                 .map(oldUser -> {
                     oldUser.setUsername(user.getUsername());
