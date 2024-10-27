@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class UserUpdateRequest {
+public class UpdateUserRequest {
     private String username;
     private String name;
     private String password;
