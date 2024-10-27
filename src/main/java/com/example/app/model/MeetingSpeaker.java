@@ -2,13 +2,17 @@ package com.example.app.model;
 
 import com.example.app.model.composite_keys.MeetingSpeakerId;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "meeting_speaker")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class MeetingSpeaker {
     @EmbeddedId
     private MeetingSpeakerId id;
@@ -27,4 +31,9 @@ public class MeetingSpeaker {
     @JoinColumn(name = "evaluator_id")
     private AppUser evaluator;
 
+    public MeetingSpeaker(MeetingSpeakerId meetingSpeakerId, Meeting meeting, AppUser speaker) {
+        this.id = meetingSpeakerId;
+        this.meeting = meeting;
+        this.speaker = speaker;
+    }
 }
