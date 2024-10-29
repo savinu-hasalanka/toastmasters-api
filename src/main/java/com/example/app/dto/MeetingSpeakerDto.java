@@ -3,10 +3,11 @@ package com.example.app.dto;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 public class MeetingSpeakerDto implements Serializable {
     private Long meetingId;
-    private List<SpeakerDto> speakers;
+    private List<SpeakerDto> speakers = new ArrayList<>();
 }
