@@ -57,17 +57,8 @@ public class MeetingRolePlayerService implements IMeetingRolePlayerService {
     }
 
     @Override
-    public Map<Role, String> getRolePlayers(Long meetingId) {
-        Map<Role, String> rolePlayerMap = new HashMap<>();
-        List<MeetingRolePlayer> meetingRolePlayers = meetingRolePlayerRepository.findAllByMeetingId(meetingId);
-
-        for (MeetingRolePlayer meetingRolePlayer : meetingRolePlayers) {
-            rolePlayerMap.put(meetingRolePlayer.getRole(), meetingRolePlayer.getRolePlayer().getUsername());
-        }
-
-        System.out.println(rolePlayerMap);
-
-        return rolePlayerMap;
+    public List<MeetingRolePlayer> getRolePlayers(Long meetingId) {
+        return meetingRolePlayerRepository.findAllByMeetingId(meetingId);
     }
 
     @Override
