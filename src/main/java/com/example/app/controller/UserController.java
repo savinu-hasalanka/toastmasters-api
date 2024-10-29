@@ -4,8 +4,7 @@ import com.example.app.dto.UserDto;
 import com.example.app.exception.AlreadyExistsException;
 import com.example.app.exception.ResourceNotFoundException;
 import com.example.app.model.AppUser;
-import com.example.app.request.AddUserRequest;
-import com.example.app.request.UpdateUserRequest;
+import com.example.app.request.UserRequest;
 import com.example.app.response.ApiResponse;
 import com.example.app.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse> addUser(@RequestBody AddUserRequest user) {
+    public ResponseEntity<ApiResponse> addUser(@RequestBody UserRequest user) {
         try {
             userService.addUser(user);
             return ResponseEntity.ok(new ApiResponse("User added", user));
@@ -38,16 +37,26 @@ public class UserController {
 
     @PutMapping("/user/{username}/update")
     public ResponseEntity<ApiResponse> updateUser(
-            @RequestBody UpdateUserRequest user,
+            @RequestBody UserRequest user,
             @PathVariable String username) {
 
         try {
+            if (!(user.getUsername().equals(username)))
+                throw new IllegalArgumentException("url username and request username must be the same.");
             userService.updateUserByUsername(user, username);
             return ResponseEntity.ok(new ApiResponse("User updated", user));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity
                     .status(NOT_FOUND)
                     .body(new ApiResponse(e.getMessage(), null));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .status(CONFLICT)
+                    .body(new ApiResponse("Error", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse("Error", e.getMessage()));
         }
     }
 
@@ -61,6 +70,10 @@ public class UserController {
             return ResponseEntity
                     .status(NOT_FOUND)
                     .body(new ApiResponse(e.getMessage(), null));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse("Error", e.getMessage()));
         }
     }
 
@@ -77,6 +90,10 @@ public class UserController {
             return ResponseEntity
                     .status(NOT_FOUND)
                     .body(new ApiResponse(e.getMessage(), null));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse("Error", e.getMessage()));
         }
     }
 }

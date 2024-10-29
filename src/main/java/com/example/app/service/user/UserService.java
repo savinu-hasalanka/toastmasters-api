@@ -4,8 +4,7 @@ import com.example.app.exception.AlreadyExistsException;
 import com.example.app.exception.ResourceNotFoundException;
 import com.example.app.model.AppUser;
 import com.example.app.repo.UserRepository;
-import com.example.app.request.AddUserRequest;
-import com.example.app.request.UpdateUserRequest;
+import com.example.app.request.UserRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +16,7 @@ public class UserService implements IUserService {
     private final UserRepository userRepository;
 
     @Override
-    public AppUser addUser(AddUserRequest request) {
+    public AppUser addUser(UserRequest request) {
         return Optional.of(request).filter(u -> !userRepository.existsByUsername(u.getUsername()))
                 .map( req -> {
                     var user = createUser(request);
@@ -27,7 +26,7 @@ public class UserService implements IUserService {
 
     }
 
-    private AppUser createUser(AddUserRequest request) {
+    private AppUser createUser(UserRequest request) {
         return new AppUser(
                 request.getUsername(),
                 request.getName(),
@@ -36,7 +35,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public AppUser updateUserByUsername(UpdateUserRequest user, String username) {
+    public AppUser updateUserByUsername(UserRequest user, String username) {
         return Optional.ofNullable(getUserByUsername(username))
                 .map(oldUser -> {
                     oldUser.setUsername(user.getUsername());
