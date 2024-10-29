@@ -6,7 +6,7 @@ import com.example.app.model.Meeting;
 import com.example.app.model.types.Role;
 import com.example.app.request.AddRolePlayerRequest;
 import com.example.app.response.ApiResponse;
-import com.example.app.service.meetingRoleplayer.MeetingRolePlayerService;
+import com.example.app.service.meetingRoleplayer.IMeetingRolePlayerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ import static org.springframework.http.HttpStatus.*;
 @RequiredArgsConstructor
 @RequestMapping("api/v1/meeting-role-player")
 public class MeetingRolePlayerController {
-    private final MeetingRolePlayerService meetingRolePlayerService;
+    private final IMeetingRolePlayerService meetingRolePlayerService;
 
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addRolePlayer(@RequestBody AddRolePlayerRequest request) {

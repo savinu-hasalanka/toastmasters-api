@@ -8,7 +8,7 @@ import com.example.app.model.MeetingSpeaker;
 import com.example.app.request.EvaluatorRequest;
 import com.example.app.request.SpeakerRequest;
 import com.example.app.response.ApiResponse;
-import com.example.app.service.meetingSpeaker.MeetingSpeakerService;
+import com.example.app.service.meetingSpeaker.IMeetingSpeakerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +22,7 @@ import static org.springframework.http.HttpStatus.*;
 @RequiredArgsConstructor
 @RequestMapping("api/v1/meeting-speaker")
 public class MeetingSpeakerController {
-    private final MeetingSpeakerService meetingSpeakerService;
+    private final IMeetingSpeakerService meetingSpeakerService;
 
     @GetMapping("/get/{meetingId}")
     public ResponseEntity<ApiResponse> getAllSpeakers(@PathVariable Long meetingId) {

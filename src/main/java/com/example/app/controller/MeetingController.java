@@ -5,7 +5,7 @@ import com.example.app.model.Meeting;
 import com.example.app.request.AddMeetingRequest;
 import com.example.app.request.UpdateMeetingRequest;
 import com.example.app.response.ApiResponse;
-import com.example.app.service.meeting.MeetingService;
+import com.example.app.service.meeting.IMeetingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +18,7 @@ import static org.springframework.http.HttpStatus.*;
 @RequiredArgsConstructor
 @RequestMapping("api/v1/meetings")
 public class MeetingController {
-    private final MeetingService meetingService;
+    private final IMeetingService meetingService;
 
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addMeeting(@RequestBody AddMeetingRequest meeting) {

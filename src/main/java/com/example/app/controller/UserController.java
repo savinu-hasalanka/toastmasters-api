@@ -6,7 +6,7 @@ import com.example.app.exception.ResourceNotFoundException;
 import com.example.app.model.AppUser;
 import com.example.app.request.UserRequest;
 import com.example.app.response.ApiResponse;
-import com.example.app.service.user.UserService;
+import com.example.app.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +17,7 @@ import static org.springframework.http.HttpStatus.*;
 @RequiredArgsConstructor
 @RequestMapping("api/v1/users")
 public class UserController {
-    private final UserService userService;
+    private final IUserService userService;
 
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addUser(@RequestBody UserRequest user) {
