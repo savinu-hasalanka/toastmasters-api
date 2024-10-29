@@ -1,5 +1,6 @@
 package com.example.app.controller;
 
+import com.example.app.dto.UserDto;
 import com.example.app.exception.AlreadyExistsException;
 import com.example.app.exception.ResourceNotFoundException;
 import com.example.app.model.AppUser;
@@ -54,12 +55,17 @@ public class UserController {
     public ResponseEntity<ApiResponse> getUserByUsername(@PathVariable String username) {
         try {
             AppUser user = userService.getUserByUsername(username);
-            return ResponseEntity.ok(new ApiResponse("User found", user));
+            UserDto userDto = createUserDto(user);
+            return ResponseEntity.ok(new ApiResponse("User found", userDto));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity
                     .status(NOT_FOUND)
                     .body(new ApiResponse(e.getMessage(), null));
         }
+    }
+
+    private UserDto createUserDto(AppUser user) {
+        return new UserDto(user.getUsername(), user.getName());
     }
 
     @DeleteMapping("/user/{username}/delete")
