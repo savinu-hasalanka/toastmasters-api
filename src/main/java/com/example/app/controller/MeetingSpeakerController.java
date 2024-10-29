@@ -5,6 +5,7 @@ import com.example.app.dto.SpeakerDto;
 import com.example.app.exception.AlreadyExistsException;
 import com.example.app.exception.ResourceNotFoundException;
 import com.example.app.model.MeetingSpeaker;
+import com.example.app.model.types.Speaker;
 import com.example.app.request.EvaluatorRequest;
 import com.example.app.request.SpeakerRequest;
 import com.example.app.response.ApiResponse;
@@ -38,30 +39,28 @@ public class MeetingSpeakerController {
     }
 
     private MeetingSpeakerDto createMeetingSpeakerDto(Long meetingId, List<MeetingSpeaker> speakers) {
-        MeetingSpeakerDto meetingSpeakerDto = new MeetingSpeakerDto();
         List<SpeakerDto> speakerDtos = new ArrayList<>();
 
+        String speakerUsername;
+        String speakerName;
+        Speaker speakerType;
 
-        meetingSpeakerDto.setMeetingId(meetingId);
         for (MeetingSpeaker speaker : speakers) {
-            SpeakerDto speakerDto = new SpeakerDto();
-
-            speakerDto.setSpeakerUsername(speaker.getSpeaker().getUsername());
-            speakerDto.setSpeakerName(speaker.getSpeaker().getName());
-            speakerDto.setSpeakerType(speaker.getSpeakerType());
+            speakerUsername = speaker.getSpeaker().getUsername();
+            speakerName = speaker.getSpeaker().getName();
+            speakerType = speaker.getSpeakerType();
+            SpeakerDto speakerDto = new SpeakerDto(speakerUsername, speakerName, speakerType);
             try {
                 speakerDto.setEvaluatorUsername(speaker.getEvaluator().getUsername());
                 speakerDto.setEvaluatorName(speaker.getEvaluator().getName());
-            } catch (NullPointerException e) {
-                speakerDto.setEvaluatorUsername(null);
-                speakerDto.setEvaluatorName(null);
+            } catch (NullPointerException ignored) {
+                // default values will be assigned to EvaluatorUsername & EvaluatorName
             }
 
             speakerDtos.add(speakerDto);
         }
+        return new MeetingSpeakerDto(meetingId, speakerDtos);
 
-        meetingSpeakerDto.setSpeakers(speakerDtos);
-        return meetingSpeakerDto;
     }
 
     @PostMapping("/add/speaker")

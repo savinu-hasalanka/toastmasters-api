@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -91,17 +92,18 @@ public class MeetingRolePlayerController {
     }
 
     private MeetingRolePlayerDto createRolePlayerDto(Long meetingId, List<MeetingRolePlayer> meetingRolePlayer) {
-        MeetingRolePlayerDto meetingRolePlayerDto = new MeetingRolePlayerDto();
-        meetingRolePlayerDto.setMeetingId(meetingId);
+        List<RolePlayerDto> rolePlayerDtos = new ArrayList<>();
+
+        Role role;
+        String rolePlayerUsername;
 
         for (MeetingRolePlayer rolePlayer : meetingRolePlayer) {
-            RolePlayerDto rolePlayerDto = new RolePlayerDto();
-            rolePlayerDto.setRole(rolePlayer.getRole());
-            rolePlayerDto.setRolePlayerUsername(rolePlayer.getRolePlayer().getUsername());
-            meetingRolePlayerDto.getRolePlayers().add(rolePlayerDto);
+            role = rolePlayer.getRole();
+            rolePlayerUsername = rolePlayer.getRolePlayer().getUsername();
+            rolePlayerDtos.add( new RolePlayerDto(role, rolePlayerUsername));
         }
 
-        return meetingRolePlayerDto;
+        return new MeetingRolePlayerDto(meetingId, rolePlayerDtos);
     }
 
     @GetMapping("/get/meeting/{rolePlayerUsername}")
