@@ -1,5 +1,7 @@
 package com.example.app.controller;
 
+import com.example.app.dto.MeetingSpeakerDto;
+import com.example.app.dto.SpeakerDto;
 import com.example.app.exception.AlreadyExistsException;
 import com.example.app.exception.ResourceNotFoundException;
 import com.example.app.model.MeetingSpeaker;
@@ -11,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
@@ -25,12 +28,40 @@ public class MeetingSpeakerController {
     public ResponseEntity<ApiResponse> getAllSpeakers(@PathVariable Long meetingId) {
         try {
             List<MeetingSpeaker> speakers = meetingSpeakerService.getAllByMeetingId(meetingId);
-            return ResponseEntity.ok(new ApiResponse("Success", speakers));
+            MeetingSpeakerDto meetingSpeakerDto = createMeetingSpeakerDto(meetingId, speakers);
+            return ResponseEntity.ok(new ApiResponse("Success", meetingSpeakerDto));
         } catch (Exception e) {
             return ResponseEntity
                     .status(INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse("Error", e.getMessage()));
         }
+    }
+
+    private MeetingSpeakerDto createMeetingSpeakerDto(Long meetingId, List<MeetingSpeaker> speakers) {
+        MeetingSpeakerDto meetingSpeakerDto = new MeetingSpeakerDto();
+        List<SpeakerDto> speakerDtos = new ArrayList<>();
+
+
+        meetingSpeakerDto.setMeetingId(meetingId);
+        for (MeetingSpeaker speaker : speakers) {
+            SpeakerDto speakerDto = new SpeakerDto();
+
+            speakerDto.setSpeakerUsername(speaker.getSpeaker().getUsername());
+            speakerDto.setSpeakerName(speaker.getSpeaker().getName());
+            speakerDto.setSpeakerType(speaker.getSpeakerType());
+            try {
+                speakerDto.setEvaluatorUsername(speaker.getEvaluator().getUsername());
+                speakerDto.setEvaluatorName(speaker.getEvaluator().getName());
+            } catch (NullPointerException e) {
+                speakerDto.setEvaluatorUsername(null);
+                speakerDto.setEvaluatorName(null);
+            }
+
+            speakerDtos.add(speakerDto);
+        }
+
+        meetingSpeakerDto.setSpeakers(speakerDtos);
+        return meetingSpeakerDto;
     }
 
     @PostMapping("/add/speaker")

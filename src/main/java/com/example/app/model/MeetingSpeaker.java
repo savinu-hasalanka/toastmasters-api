@@ -1,6 +1,7 @@
 package com.example.app.model;
 
 import com.example.app.model.composite_keys.MeetingSpeakerId;
+import com.example.app.model.types.Speaker;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,6 +28,10 @@ public class MeetingSpeaker {
     @JoinColumn(name = "speaker_id")
     private AppUser speaker;
 
+    @Enumerated(EnumType.STRING)
+    @Column(insertable = false, updatable = false)
+    private Speaker speakerType;
+
     @ManyToOne
     @JoinColumn(name = "evaluator_id")
     private AppUser evaluator;
@@ -34,6 +39,15 @@ public class MeetingSpeaker {
     public MeetingSpeaker(MeetingSpeakerId meetingSpeakerId, Meeting meeting, AppUser speaker) {
         this.id = meetingSpeakerId;
         this.meeting = meeting;
+        this.speakerType = meetingSpeakerId.getSpeakerType();
         this.speaker = speaker;
+    }
+
+    public MeetingSpeaker(MeetingSpeakerId meetingSpeakerId, Meeting meeting, AppUser speaker, AppUser evaluator) {
+        this.id = meetingSpeakerId;
+        this.meeting = meeting;
+        this.speakerType = meetingSpeakerId.getSpeakerType();
+        this.speaker = speaker;
+        this.evaluator = evaluator;
     }
 }
