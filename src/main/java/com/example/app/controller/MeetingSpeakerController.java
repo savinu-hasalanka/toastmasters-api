@@ -50,11 +50,10 @@ public class MeetingSpeakerController {
             speakerName = speaker.getSpeaker().getName();
             speakerType = speaker.getSpeakerType();
             SpeakerDto speakerDto = new SpeakerDto(speakerUsername, speakerName, speakerType);
-            try {
+
+            if (!(speaker.getEvaluator() == null)) {
                 speakerDto.setEvaluatorUsername(speaker.getEvaluator().getUsername());
                 speakerDto.setEvaluatorName(speaker.getEvaluator().getName());
-            } catch (NullPointerException ignored) {
-                // default values will be assigned to EvaluatorUsername & EvaluatorName
             }
 
             speakerDtos.add(speakerDto);
