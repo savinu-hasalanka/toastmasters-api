@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +31,7 @@ public class MeetingSpeakerService implements IMeetingSpeakerService {
     }
 
     @Override
-    public MeetingSpeaker addSpeaker(SpeakerRequest request) {
+    public MeetingSpeaker addSpeaker(SpeakerRequest request) throws ResourceNotFoundException, AlreadyExistsException {
         Long meetingId = request.getMeetingId();
         String speakerUsername = request.getSpeakerUsername();
         Speaker speakerType = request.getSpeakerType();
@@ -52,7 +53,7 @@ public class MeetingSpeakerService implements IMeetingSpeakerService {
     }
 
     @Override
-    public MeetingSpeaker addEvaluator(EvaluatorRequest request) {
+    public MeetingSpeaker addEvaluator(EvaluatorRequest request) throws ResourceNotFoundException, AlreadyExistsException {
         Long meetingId = request.getMeetingId();
         String speakerUsername = request.getSpeakerUsername();
         Speaker speakerType = request.getSpeakerType();
@@ -79,21 +80,37 @@ public class MeetingSpeakerService implements IMeetingSpeakerService {
         return meetingSpeakerRepository.save(new MeetingSpeaker(meetingSpeakerId, meeting, speaker, evaluator));
     }
 
+//    @Override
+//    public void removeSpeaker(SpeakerRequest request) {
+//        Long meetingId = request.getMeetingId();
+//        String speakerUsername = request.getSpeakerUsername();
+//        Speaker speakerType = request.getSpeakerType();
+//
+//        meetingSpeakerRepository.findById(new MeetingSpeakerId(meetingId, speakerUsername, speakerType))
+//                .ifPresentOrElse(
+//                        meetingSpeakerRepository::delete,
+//                        () -> {throw new ResourceNotFoundException("meeting-speaker not found");}
+//                );
+//    }
+
     @Override
-    public void removeSpeaker(SpeakerRequest request) {
+    public void removeSpeaker(SpeakerRequest request) throws ResourceNotFoundException {
         Long meetingId = request.getMeetingId();
         String speakerUsername = request.getSpeakerUsername();
         Speaker speakerType = request.getSpeakerType();
 
-        meetingSpeakerRepository.findById(new MeetingSpeakerId(meetingId, speakerUsername, speakerType))
-                .ifPresentOrElse(
-                        meetingSpeakerRepository::delete,
-                        () -> {throw new ResourceNotFoundException("meeting-speaker not found");}
-                );
+        MeetingSpeakerId meetingSpeakerId = new MeetingSpeakerId(meetingId, speakerUsername, speakerType);
+        Optional<MeetingSpeaker> meetingSpeaker = meetingSpeakerRepository.findById(meetingSpeakerId);
+
+        if (meetingSpeaker.isPresent()) {
+            meetingSpeakerRepository.delete(meetingSpeaker.get());
+        } else {
+            throw new ResourceNotFoundException("meeting-speaker not found");
+        }
     }
 
     @Override
-    public void removeEvaluator(SpeakerRequest request) {
+    public void removeEvaluator(SpeakerRequest request) throws ResourceNotFoundException {
         Long meetingId = request.getMeetingId();
         String speakerUsername = request.getSpeakerUsername();
         Speaker speakerType = request.getSpeakerType();
@@ -108,10 +125,19 @@ public class MeetingSpeakerService implements IMeetingSpeakerService {
                 .orElseThrow(() -> new ResourceNotFoundException("Speaker not found"));
 
 
-        meetingSpeakerRepository.findById(meetingSpeakerId)
-                .ifPresentOrElse(
-                        existingMeetingSpeaker -> meetingSpeakerRepository.save(new MeetingSpeaker(meetingSpeakerId, meeting, speaker, null)),
-                        () -> {throw new ResourceNotFoundException("No record found");}
-                );
+//        meetingSpeakerRepository.findById(meetingSpeakerId)
+//                .ifPresentOrElse(
+//                        existingMeetingSpeaker -> meetingSpeakerRepository.save(new MeetingSpeaker(meetingSpeakerId, meeting, speaker, null)),
+//                        () -> {throw new ResourceNotFoundException("No record found");}
+//                );
+
+        Optional<MeetingSpeaker> meetingSpeaker = meetingSpeakerRepository.findById(meetingSpeakerId);
+
+        if (meetingSpeaker.isPresent()) {
+            meetingSpeakerRepository.save(new MeetingSpeaker(meetingSpeakerId, meeting, speaker, null));
+        } else {
+            throw new ResourceNotFoundException("No record found");
+        }
+
     }
 }

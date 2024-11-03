@@ -16,7 +16,7 @@ public class UserService implements IUserService {
     private final UserRepository userRepository;
 
     @Override
-    public AppUser addUser(UserRequest request) {
+    public AppUser addUser(UserRequest request) throws AlreadyExistsException {
         return Optional.of(request).filter(u -> !userRepository.existsByUsername(u.getUsername()))
                 .map( req -> {
                     var user = createUser(request);
@@ -35,7 +35,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public AppUser updateUserByUsername(UserRequest user, String username) {
+    public AppUser updateUserByUsername(UserRequest user, String username) throws ResourceNotFoundException {
         return Optional.ofNullable(getUserByUsername(username))
                 .map(oldUser -> {
                     oldUser.setUsername(user.getUsername());
@@ -47,16 +47,27 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public AppUser getUserByUsername(String username) {
+    public AppUser getUserByUsername(String username) throws ResourceNotFoundException {
         return userRepository.findByUsername(username)
                         .orElseThrow(() -> new ResourceNotFoundException("User not found!"));
     }
 
+//    @Override
+//    public void deleteUserByUsername(String username) throws ResourceNotFoundException {
+//        userRepository.findByUsername(username)
+//                .ifPresentOrElse(userRepository::delete, () -> {
+//                    throw new ResourceNotFoundException("User not found!");
+//                });
+//    }
+
     @Override
-    public void deleteUserByUsername(String username) {
-        userRepository.findByUsername(username)
-                .ifPresentOrElse(userRepository::delete, () -> {
-                    throw new ResourceNotFoundException("User not found!");
-                });
+    public void deleteUserByUsername(String username) throws ResourceNotFoundException {
+        Optional<AppUser> user = userRepository.findByUsername(username);
+        if (user.isPresent()) {
+            userRepository.delete(user.get());
+        } else {
+            throw new ResourceNotFoundException("User not found!");
+        }
     }
+
 }

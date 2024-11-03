@@ -21,7 +21,7 @@ public class MeetingService implements IMeetingService {
     private final UserRepository userRepository;
 
     @Override
-    public Meeting addMeeting(AddMeetingRequest request) {
+    public Meeting addMeeting(AddMeetingRequest request) throws ResourceNotFoundException {
         return userRepository.findByUsername(request.getHost())
                 .map(appUser -> meetingRepository.save(createMeeting(request, appUser)))
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
@@ -38,7 +38,7 @@ public class MeetingService implements IMeetingService {
     }
 
     @Override
-    public Meeting updateMeeting(UpdateMeetingRequest request, Long meetingId) {
+    public Meeting updateMeeting(UpdateMeetingRequest request, Long meetingId) throws ResourceNotFoundException {
         return meetingRepository.findById(meetingId)
                 .map(fetchedMeeting -> updateFetchedMeeting(fetchedMeeting, request))
                 .map(meetingRepository::save)
@@ -55,7 +55,7 @@ public class MeetingService implements IMeetingService {
     }
 
     @Override
-    public List<Meeting> getMeetingByHost(String username) {
+    public List<Meeting> getMeetingByHost(String username) throws ResourceNotFoundException {
         AppUser host = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("Host not found"));
 

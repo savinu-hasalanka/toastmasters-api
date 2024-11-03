@@ -5,6 +5,7 @@ import com.example.app.exception.ResourceNotFoundException;
 import com.example.app.model.AppUser;
 import com.example.app.model.Meeting;
 import com.example.app.model.MeetingRolePlayer;
+import com.example.app.model.MeetingSpeaker;
 import com.example.app.model.composite_keys.MeetingRolePlayerId;
 import com.example.app.model.types.Role;
 import com.example.app.repo.MeetingRepository;
@@ -23,7 +24,7 @@ public class MeetingRolePlayerService implements IMeetingRolePlayerService {
     private final UserRepository userRepository;
 
     @Override
-    public void addRolePlayer(Long meetingId, Role role, String rolePlayerUsername) {
+    public void addRolePlayer(Long meetingId, Role role, String rolePlayerUsername) throws AlreadyExistsException, ResourceNotFoundException {
         Meeting meeting = meetingRepository
                 .findById(meetingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Meeting not found"));
@@ -48,12 +49,22 @@ public class MeetingRolePlayerService implements IMeetingRolePlayerService {
     }
 
     @Override
-    public void removeRolePlayer(Long meetingId, Role role) {
-        meetingRolePlayerRepository.findById(new MeetingRolePlayerId(meetingId, role))
-                .ifPresentOrElse(
-                        meetingRolePlayerRepository::delete,
-                        () -> {throw new ResourceNotFoundException("meeting-role not found");}
-                );
+    public void removeRolePlayer(Long meetingId, Role role) throws ResourceNotFoundException {
+//        meetingRolePlayerRepository.findById(new MeetingRolePlayerId(meetingId, role))
+//                .ifPresentOrElse(
+//                        meetingRolePlayerRepository::delete,
+//                        () -> {throw new ResourceNotFoundException("meeting-role not found");}
+//                );
+//
+
+        Optional<MeetingRolePlayer> meetingRolePlayer =
+                meetingRolePlayerRepository.findById(new MeetingRolePlayerId(meetingId, role));
+
+        if (meetingRolePlayer.isPresent()) {
+            meetingRolePlayerRepository.delete(meetingRolePlayer.get());
+        } else {
+            throw new ResourceNotFoundException("meeting-role not found");
+        }
     }
 
     @Override
@@ -62,7 +73,7 @@ public class MeetingRolePlayerService implements IMeetingRolePlayerService {
     }
 
     @Override
-    public Set<Meeting> getMeetings(String rolePlayerUsername) {
+    public Set<Meeting> getMeetings(String rolePlayerUsername) throws ResourceNotFoundException {
         Set<Meeting> meetings = new HashSet<>();
         AppUser rolePlayer = userRepository.findByUsername(rolePlayerUsername)
                 .orElseThrow(() -> new ResourceNotFoundException("Role-player not found"));
