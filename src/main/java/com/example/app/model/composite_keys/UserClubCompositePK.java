@@ -1,10 +1,8 @@
 package com.example.app.model.composite_keys;
 
-import com.example.app.model.types.Speaker;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,10 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class MeetingSpeakerId {
-    private Long meetingId;
-    private String username;
+@EqualsAndHashCode
+public class UserClubCompositePK {
 
-    @Enumerated(EnumType.STRING)
-    private Speaker speakerType;
+    private String username;
+    private int clubId;
+
 }
