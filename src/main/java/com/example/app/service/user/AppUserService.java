@@ -1,38 +1,40 @@
 package com.example.app.service.user;
 
 import com.example.app.exception.AlreadyExistsException;
-import com.example.app.exception.ResourceNotFoundException;
 import com.example.app.model.AppUser;
-
+import com.example.app.repo.AppUserRepository;
 import com.example.app.request.UserRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-//@Service
-//@RequiredArgsConstructor
-public class UserService {
-//    private final UserRepository userRepository;
+@Service
+@RequiredArgsConstructor
+public class AppUserService implements IAppUserService {
+    private final AppUserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
 
-//    @Override
-//    public AppUser addUser(UserRequest request) throws AlreadyExistsException {
-//        return Optional.of(request).filter(u -> !userRepository.existsByUsername(u.getUsername()))
-//                .map( req -> {
-//                    var user = createUser(request);
-//                    return userRepository.save(user);
-//                })
-//                .orElseThrow(() -> new AlreadyExistsException(request.getUsername() + " already exists"));
-//
-//    }
-//
-//    private AppUser createUser(UserRequest request) {
-//        return new AppUser(
-//                request.getUsername(),
-//                request.getName(),
-//                request.getPassword()
-//        );
-//    }
+    @Override
+    public AppUser register(UserRequest request) throws AlreadyExistsException {
+        return Optional.of(request).filter(u -> !userRepository.existsByUsername(u.getUsername()))
+                .map( req -> {
+                    var user = createUser(request);
+                    return userRepository.save(user);
+                })
+                .orElseThrow(() -> new AlreadyExistsException(request.getUsername() + " already exists"));
+
+    }
+
+    private AppUser createUser(UserRequest request) {
+        return new AppUser(
+                request.getUsername(),
+                request.getName(),
+                request.getEmail(),
+                passwordEncoder.encode(request.getPassword())
+        );
+    }
 //
 //    @Override
 //    public AppUser updateUserByUsername(UserRequest user, String username) throws ResourceNotFoundException {

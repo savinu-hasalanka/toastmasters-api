@@ -1,39 +1,36 @@
 package com.example.app.controller;
 
-import com.example.app.dto.UserDto;
 import com.example.app.exception.AlreadyExistsException;
-import com.example.app.exception.ResourceNotFoundException;
-import com.example.app.model.AppUser;
 import com.example.app.request.UserRequest;
 import com.example.app.response.ApiResponse;
-import com.example.app.service.user.IUserService;
+import com.example.app.service.user.IAppUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.*;
 
-//@RestController
-//@RequiredArgsConstructor
-//@RequestMapping("api/v1/users")
-public class UserController {
-//    private final IUserService userService;
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("api/v2/users")
+public class AppUserController {
+    private final IAppUserService userService;
 
-//    @PostMapping("/add")
-//    public ResponseEntity<ApiResponse> addUser(@RequestBody UserRequest user) {
-//        try {
-//            userService.addUser(user);
-//            return ResponseEntity.ok(new ApiResponse("User added", user));
-//        } catch (AlreadyExistsException e) {
-//            return ResponseEntity
-//                    .status(CONFLICT)
-//                    .body(new ApiResponse(e.getMessage(), null));
-//        } catch (Exception e) {
-//            return ResponseEntity
-//                    .status(INTERNAL_SERVER_ERROR)
-//                    .body(new ApiResponse("Error!", null));
-//        }
-//    }
+    @PostMapping("/register")
+    public ResponseEntity<ApiResponse> register(@RequestBody UserRequest user) {
+        try {
+            userService.register(user);
+            return ResponseEntity.ok(new ApiResponse("User account created", user));
+        } catch (AlreadyExistsException e) {
+            return ResponseEntity
+                    .status(CONFLICT)
+                    .body(new ApiResponse(e.getMessage(), null));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse("Error!", null));
+        }
+    }
 //
 //    @PutMapping("/user/{username}/update")
 //    public ResponseEntity<ApiResponse> updateUser(
