@@ -1,7 +1,6 @@
 package com.example.app.model;
 
 import com.example.app.model.types.Status;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 

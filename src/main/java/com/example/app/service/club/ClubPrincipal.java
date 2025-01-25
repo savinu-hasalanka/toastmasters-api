@@ -1,6 +1,6 @@
-package com.example.app.service.user;
+package com.example.app.service.club;
 
-import com.example.app.model.AppUser;
+import com.example.app.model.Club;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,9 +10,9 @@ import java.util.Collection;
 import java.util.Collections;
 
 @RequiredArgsConstructor
-public class UserPrincipal implements UserDetails {
+public class ClubPrincipal implements UserDetails {
 
-    private final AppUser user;
+    private final Club club;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -21,12 +21,12 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return club.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return String.valueOf(club.getClubId());
     }
 
     @Override

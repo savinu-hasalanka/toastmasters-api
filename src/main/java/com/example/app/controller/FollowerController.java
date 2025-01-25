@@ -7,6 +7,7 @@ import com.example.app.response.ApiResponse;
 import com.example.app.service.follower.IFollowerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,9 +38,9 @@ public class FollowerController {
 
     @PostMapping("/follow/{clubId}")
     public ResponseEntity<ApiResponse> followClub(@PathVariable Integer clubId) {
-        // TODO retrieve username from the authenticate object
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         try {
-            followerService.follow(clubId, "bbrown");
+            followerService.follow(clubId, username);
             return ResponseEntity.ok(new ApiResponse("Followed", null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity
@@ -58,9 +59,9 @@ public class FollowerController {
 
     @DeleteMapping("/unfollow/{clubId}")
     public ResponseEntity<ApiResponse> unfollowClub(@PathVariable Integer clubId) {
-        // TODO retrieve username from the authenticate object
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         try {
-            followerService.unfollow(clubId, "bbrown");
+            followerService.unfollow(clubId, username);
             return ResponseEntity.ok(new ApiResponse("Unfollowed", null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity

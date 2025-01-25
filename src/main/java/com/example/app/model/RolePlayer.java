@@ -1,7 +1,6 @@
 package com.example.app.model;
 
 import com.example.app.model.composite_keys.UserMeetingRoleCompositePK;
-import com.example.app.model.types.MeetingRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
