@@ -10,6 +10,7 @@ import com.example.app.response.ApiResponse;
 import com.example.app.service.exco.IExcoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,6 +43,7 @@ public class ExcoController {
     public ResponseEntity<ApiResponse> addExcoMember(@RequestBody AddExcoRequest addExcoRequest) {
         try {
             ExcoRole.valueOf(addExcoRequest.getRole());
+            addExcoRequest.setClubId(Integer.valueOf(SecurityContextHolder.getContext().getAuthentication().getName()));
             excoService.addExcoMember(addExcoRequest);
             return ResponseEntity.ok(new ApiResponse("Added", null));
         } catch (NullPointerException | IllegalArgumentException e) {
@@ -57,6 +59,7 @@ public class ExcoController {
                     .status(CONFLICT)
                     .body(new ApiResponse(e.getMessage(), null));
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity
                     .status(INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse("Error!", null));
@@ -71,6 +74,7 @@ public class ExcoController {
     @DeleteMapping("/remove")
     public ResponseEntity<ApiResponse> removeExcoMember(@RequestBody DeleteExcoRequest deleteExcoRequest) {
         try {
+            deleteExcoRequest.setClubId(Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName()));
             excoService.deleteExcoMember(deleteExcoRequest);
             return ResponseEntity.ok(new ApiResponse("Removed", null));
         } catch (ResourceNotFoundException e) {

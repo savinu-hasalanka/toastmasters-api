@@ -13,6 +13,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class ClubService implements IClubService {
@@ -54,7 +56,7 @@ public class ClubService implements IClubService {
 
         if (authentication.isAuthenticated()) {
             System.out.println("Authenticated");
-            return jwtService.generateToken(String.valueOf(club.getClubId()), "club");
+        return jwtService.generateToken(String.valueOf(club.getClubId()), "club", List.of("ROLE_CLUB"));
         }
 
         System.out.println("Authentication Failed");

@@ -10,10 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 
@@ -32,9 +29,20 @@ public class JWTService  {
         }
     }
 
-    public String generateToken(String username, String type) {
+    public String generateToken(String username, String type, Collection<String> roles) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("type", type);
+//        claims.put("roles", roles.stream().map(role -> role.replace("ROLE_", "")).toList());
+        List<String> rolesWithoutPrefix = roles.stream()
+                .map(role -> role.replace("ROLE_", ""))
+                .toList();
+
+
+        claims.put("roles", rolesWithoutPrefix);
+
+        // **Add this line**
+        System.out.println("Roles stored in token: " + rolesWithoutPrefix);
+
 
         return Jwts.builder()
                 .claims()
@@ -78,10 +86,19 @@ public class JWTService  {
                 .get(claimKey, String.class);
     }
 
+    public List<String> extractRolesFromToken(String token) {
+        Claims claims = extractAllClaims(token);
+        return claims.get("roles", List.class); // Extract roles as a List
+    }
+
     public boolean validateToken(String token, UserDetails userDetails) {
         final String userName = extractUsernameFromToken(token);
+        List<String> roles = extractRolesFromToken(token);
+
         System.out.println(userDetails.getUsername());
         System.out.println(userName);
+        System.out.println("Extracted roles from JWT: " + roles);
+
         return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 

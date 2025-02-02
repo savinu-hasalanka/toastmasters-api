@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -56,48 +57,10 @@ public class AppUserService implements IAppUserService {
 
         if (authentication.isAuthenticated()) {
             System.out.println("Authenticated");
-            return jwtService.generateToken(user.getUsername(), "user");
+            return jwtService.generateToken(user.getUsername(), "user", List.of("ROLE_USER"));
         }
 
         System.out.println("Authentication Failed");
         return null;
     }
-
-//
-//    @Override
-//    public AppUser updateUserByUsername(UserRequest user, String username) throws ResourceNotFoundException {
-//        return Optional.ofNullable(getUserByUsername(username))
-//                .map(oldUser -> {
-//                    oldUser.setUsername(user.getUsername());
-//                    oldUser.setName(user.getName());
-//                    oldUser.setPassword(user.getPassword());
-//                    return userRepository.save(oldUser);
-//                })
-//                .orElseThrow(() -> new ResourceNotFoundException("User not found!"));
-//    }
-//
-//    @Override
-//    public AppUser getUserByUsername(String username) throws ResourceNotFoundException {
-//        return userRepository.findByUsername(username)
-//                        .orElseThrow(() -> new ResourceNotFoundException("User not found!"));
-//    }
-//
-////    @Override
-////    public void deleteUserByUsername(String username) throws ResourceNotFoundException {
-////        userRepository.findByUsername(username)
-////                .ifPresentOrElse(userRepository::delete, () -> {
-////                    throw new ResourceNotFoundException("User not found!");
-////                });
-////    }
-//
-//    @Override
-//    public void deleteUserByUsername(String username) throws ResourceNotFoundException {
-//        Optional<AppUser> user = userRepository.findByUsername(username);
-//        if (user.isPresent()) {
-//            userRepository.delete(user.get());
-//        } else {
-//            throw new ResourceNotFoundException("User not found!");
-//        }
-//    }
-
 }

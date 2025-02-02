@@ -9,10 +9,4 @@ public class SpeakerDto implements Serializable {
     private String speakerName;
     private String evaluatorUsername = "";
     private String evaluatorName = "";
-
-//    public SpeakerDto(String speakerUsername, String speakerName, Speaker speakerType) {
-//        this.speakerUsername = speakerUsername;
-//        this.speakerName = speakerName;
-//        this.speakerType = speakerType;
-//    }
 }

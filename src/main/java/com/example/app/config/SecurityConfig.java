@@ -39,6 +39,8 @@ public class SecurityConfig {
                 .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/v2/users/register", "/api/v2/users/login", "/api/v2/clubs/register", "/api/v2/clubs/login").permitAll()
+                        .requestMatchers("/api/v2/exco/add", "/api/v2/exco/remove").hasAuthority("ROLE_CLUB")
+                        .requestMatchers("api/v2/followers/follow/*", "api/v2/followers/unfollow/*").hasAuthority("ROLE_USER")
                                 .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())

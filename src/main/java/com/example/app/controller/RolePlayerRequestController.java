@@ -85,7 +85,6 @@ public class RolePlayerRequestController {
                     .status(NOT_FOUND)
                     .body(new ApiResponse(e.getMessage(), null));
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity
                     .status(INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse("Error!", null));

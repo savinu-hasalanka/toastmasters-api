@@ -15,8 +15,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -59,16 +63,27 @@ public class JwtFilter extends OncePerRequestFilter {
                     context.getBean(AppUserDetailsService.class).loadUserByUsername(username) :
                     context.getBean(ClubDetailsService.class).loadUserByUsername(username);
 
+            List<String> roles = jwtService.extractRolesFromToken(token);
+            System.out.println("Roles extracted from token: " + roles);
+
+            List<SimpleGrantedAuthority> authorities = roles.stream()
+                    .map(role -> role.startsWith("ROLE_") ? new SimpleGrantedAuthority(role) : new SimpleGrantedAuthority("ROLE_" + role))
+                    .toList();
+
+            System.out.println("Extracted authorities: " + authorities);
+
             if (jwtService.validateToken(token, userDetails)) {
                 System.out.println("Inside doFilterInternal method : JwtFilter jwtService.validateToken");
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
-                        userDetails.getAuthorities()
+                        authorities
                 );
 
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+
+                System.out.println("Authentication object in SecurityContextHolder: " + SecurityContextHolder.getContext().getAuthentication());
             }
 
 

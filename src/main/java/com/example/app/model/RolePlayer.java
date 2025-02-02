@@ -28,11 +28,6 @@ public class RolePlayer {
     @JoinColumn(name = "meeting_id")
     private Meeting meeting;
 
-//    @Enumerated(EnumType.STRING)
-//    @MapsId("meetingRole")
-//    @Column(name = "role")
-//    private MeetingRole meetingRole;
-
     private String reportLink;
 
 }

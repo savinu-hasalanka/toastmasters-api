@@ -27,6 +27,4 @@ public class RolePlayerRequest {
     @MapsId("meetingId")
     @JoinColumn(name = "meeting_id")
     private Meeting meeting;
-
-
 }
