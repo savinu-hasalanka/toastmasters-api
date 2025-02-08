@@ -36,7 +36,6 @@ public class ClubController {
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> login(@RequestBody ClubLoginRequest club) {
-        System.out.println("Hit api login");
         try {
             String token = clubService.login(club);
             return ResponseEntity.ok(new ApiResponse("Login success", token));

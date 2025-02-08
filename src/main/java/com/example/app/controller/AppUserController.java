@@ -20,7 +20,6 @@ public class AppUserController {
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> register(@RequestBody UserRegisterRequest user) {
-        System.out.println("Inside register method : AppUserController.register");
         try {
             userService.register(user);
             return ResponseEntity.ok(new ApiResponse("User account created", user));
@@ -37,7 +36,6 @@ public class AppUserController {
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> login(@RequestBody UserLoginRequest user) {
-        System.out.println("Hit api login");
         try {
             String token = userService.login(user);
             return ResponseEntity.ok(new ApiResponse("Login success", token));

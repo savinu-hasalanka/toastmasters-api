@@ -59,7 +59,6 @@ public class ExcoController {
                     .status(CONFLICT)
                     .body(new ApiResponse(e.getMessage(), null));
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity
                     .status(INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse("Error!", null));

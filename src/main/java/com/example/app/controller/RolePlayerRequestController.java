@@ -4,6 +4,7 @@ import com.example.app.exception.AlreadyExistsException;
 import com.example.app.exception.ResourceNotFoundException;
 import com.example.app.model.RolePlayer;
 import com.example.app.model.RolePlayerRequest;
+import com.example.app.model.types.MeetingRole;
 import com.example.app.request.RolePlayerRequestRequest;
 import com.example.app.response.ApiResponse;
 import com.example.app.service.roleplayer.IRolePlayerService;
@@ -40,10 +41,14 @@ public class RolePlayerRequestController {
 
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addRolePlayer(@RequestBody RolePlayerRequestRequest request) {
-        // TODO: Check if MeetingRole is valid
         try {
+            MeetingRole.valueOf(request.getRole());
             rolePlayerService.addRolePlayer(request);
             return ResponseEntity.ok(new ApiResponse("Role-player added", null));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .status(BAD_REQUEST)
+                    .body(new ApiResponse(e.getMessage(), null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity
                     .status(NOT_FOUND)
