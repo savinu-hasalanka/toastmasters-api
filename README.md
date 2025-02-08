@@ -10,8 +10,6 @@ Bank-end API to create and manage Toastmasters Meetings.
 * Utilized Spring AOP for centralized logging, tracking API interactions, and improving system observability.
 *	Designed and optimized database interactions using MySQL with JPA/Hibernate, ensuring efficient data persistence.
 *	Followed OOP and SOLID principles to maintain clean, modular, and maintainable code.
-*	Currently working on hosting the application on AWS and connecting the backend to a React and SwiftUI frontend to ensure seamless integration between mobile and web applications.
-
 
 ## Tech Stack
 
@@ -29,9 +27,7 @@ Bank-end API to create and manage Toastmasters Meetings.
 
 ## Currently working on ...
 
-* Adding authentication using Spring security and JWT
-* Extending the database with reporting fucntionality (meetingRole-players can upload their respective reports)
-* Connecting to a mobile front-end
+* hosting the application on AWS and connecting the backend to a React and SwiftUI frontend to ensure seamless integration between mobile and web applications.
 
 
 ## Author
