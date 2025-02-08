@@ -8,7 +8,7 @@ Bank-end API to create and manage Toastmasters Meetings.
 * Create meeting
 * Add meeting details
 * Update meeting
-* Add role players to meetings
+* Add meetingRole players to meetings
 * Add/remove speakers and evaluators
 
 ## Tech Stack
@@ -28,7 +28,7 @@ Bank-end API to create and manage Toastmasters Meetings.
 ## Currently working on ...
 
 * Adding authentication using Spring security and JWT
-* Extending the database with reporting fucntionality (role-players can upload their respective reports)
+* Extending the database with reporting fucntionality (meetingRole-players can upload their respective reports)
 * Connecting to a mobile front-end
 
 
