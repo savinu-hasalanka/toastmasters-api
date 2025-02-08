@@ -4,12 +4,14 @@ Bank-end API to create and manage Toastmasters Meetings.
 
 ## Features
 
-* Add users
-* Create meeting
-* Add meeting details
-* Update meeting
-* Add meetingRole players to meetings
-* Add/remove speakers and evaluators
+* Developed a robust backend API for managing Toastmasters club meetings, incorporating user management, meeting scheduling, and role assignments.
+*	Implemented role-based authentication to differentiate between club administrators and general users using Spring Security.
+*	Secured endpoints with JWT authentication, ensuring safe and scalable user access control.
+* Utilized Spring AOP for centralized logging, tracking API interactions, and improving system observability.
+*	Designed and optimized database interactions using MySQL with JPA/Hibernate, ensuring efficient data persistence.
+*	Followed OOP and SOLID principles to maintain clean, modular, and maintainable code.
+*	Currently working on hosting the application on AWS and connecting the backend to a React and SwiftUI frontend to ensure seamless integration between mobile and web applications.
+
 
 ## Tech Stack
 
